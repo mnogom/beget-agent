@@ -1,0 +1,13 @@
+__pycache__
+.venv/
+dist/
+snippets
+.vscode
+.idea
+.DS_Store
+.github/.DS_Store
+.coverage
+coverage.xml
+*.pyc
+tmp
+.env
