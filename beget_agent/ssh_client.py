@@ -59,23 +59,25 @@ def execute_commands(command_list, **kwargs):
 
 
 def main():
-    import sshtunnel
-
     config = read_config()
-    with sshtunnel.open_tunnel(
-        (config.host, config.port),
-        ssh_username=config.username,
-        ssh_private_key_password=config.password,
-        remote_bind_address=('localhost', 222)
-    ) as tunnel:
-        client = paramiko.SSHClient()
-        client.load_system_host_keys()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect('127.0.0.1', 10022)
-        # do some operations with client session
-        client.close()
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(hostname=config.host,
+                   port=config.port,
+                   username=config.username,
+                   password=config.password,
+                   timeout=5)
+    channel = client.get_transport().open_session()
+    channel.get_pty()
+    channel.exec_command('ssh localhost -p 222')
+    channel.send('{}\r\n'.format(config.password))
+    print(channel.recv(1024))
 
-    print('FINISH!')
+    channel.close()
+    client.close()
+
+
+
 
 
 if __name__ == '__main__':
