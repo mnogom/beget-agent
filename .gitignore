@@ -11,3 +11,4 @@ coverage.xml
 *.pyc
 tmp
 .env
+beag_pipe

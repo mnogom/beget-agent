@@ -3,25 +3,28 @@
 import os
 from dotenv import load_dotenv
 
-ENV_FILE = '.env'
+PIPE_FILE = 'beag_pipe'
 
 load_dotenv()
 
 
+class Config:
+    def __init__(self, host, port, username, password, remote_home):
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
+        self.remote_home = remote_home
+
+
 def read_config():
-    config = {'host': os.getenv('SFTP_HOST'),
-              'port': int(os.getenv('SFTP_PORT')),
-              'username': os.getenv('SFTP_USERNAME'),
-              'password': os.getenv('SFTP_PASSWORD'),
-              'remote_home': os.getenv('SFTP_REMOTE_HOME')}
-    return config
+    return Config(host=os.getenv('SFTP_HOST'),
+                  port=int(os.getenv('SFTP_PORT')),
+                  username=os.getenv('SFTP_USERNAME'),
+                  password=os.getenv('SFTP_PASSWORD'),
+                  remote_home=os.getenv('SFTP_REMOTE_HOME'))
 
 
-def create_config(**kwargs):
-    with open(ENV_FILE, 'w') as file:
-        for key, value in kwargs.items():
-            file.write(f'{key}={value}\n')
-
-
-def is_config_exists():
-    return ENV_FILE in os.listdir()
+def read_beag_pipe():
+    with open(PIPE_FILE, 'r') as file:
+        return ';'.join(line.strip() for line in file.readlines() if line)

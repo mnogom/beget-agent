@@ -74,7 +74,7 @@ tests = ["pytest", "dj-database-url", "dj-email-url", "django-cache-url"]
 name = "flake8"
 version = "4.0.1"
 description = "the modular source code checker: pep8 pyflakes and co"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -101,7 +101,7 @@ tests = ["pytest", "pytz", "simplejson"]
 name = "mccabe"
 version = "0.6.1"
 description = "McCabe checker, plugin for flake8"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -125,6 +125,17 @@ gssapi = ["pyasn1 (>=0.1.7)", "gssapi (>=1.4.1)", "pywin32 (>=2.1.8)"]
 invoke = ["invoke (>=1.3)"]
 
 [[package]]
+name = "paramiko-expect"
+version = "0.3.2"
+description = "An expect-like extension for the Paramiko SSH library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+paramiko = ">=1.10.1"
+
+[[package]]
 name = "progress"
 version = "1.6"
 description = "Easy to use progress bars"
@@ -144,7 +155,7 @@ python-versions = ">=3.3"
 name = "pycodestyle"
 version = "2.8.0"
 description = "Python style guide checker"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -160,7 +171,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "pyflakes"
 version = "2.4.0"
 description = "passive checker of Python programs"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -201,7 +212,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "bc8591fd4c79154994860d8b48629cc341550879a28beb8f347c1dd0d355a20b"
+content-hash = "8675c66c9ad089eac06987a8e7b6c8100696031bc9adf8a4720dbec49b32d0ae"
 
 [metadata.files]
 argparse = [
@@ -313,6 +324,10 @@ mccabe = [
 paramiko = [
     {file = "paramiko-2.9.2-py2.py3-none-any.whl", hash = "sha256:04097dbd96871691cdb34c13db1883066b8a13a0df2afd4cb0a92221f51c2603"},
     {file = "paramiko-2.9.2.tar.gz", hash = "sha256:944a9e5dbdd413ab6c7951ea46b0ab40713235a9c4c5ca81cfe45c6f14fa677b"},
+]
+paramiko-expect = [
+    {file = "paramiko-expect-0.3.2.tar.gz", hash = "sha256:27b17840bb5a631b12d581d190f49bbc58cb5b9363e85c3046c7d22ac492a192"},
+    {file = "paramiko_expect-0.3.2-py2.py3-none-any.whl", hash = "sha256:493156c2131d7408a04a73e95ba4ba348c1e2c49cf0a919b9f1e3ffa6c6f92ac"},
 ]
 progress = [
     {file = "progress-1.6.tar.gz", hash = "sha256:c9c86e98b5c03fa1fe11e3b67c1feda4788b8d0fe7336c2ff7d5644ccfba34cd"},

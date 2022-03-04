@@ -4,6 +4,7 @@ import argparse
 
 COMMAND_PUT = 'put'
 COMMAND_RESTART = 'restart'
+COMMAND_EXECUTE_PIPE = 'execute_pipe'
 
 
 def parse_args():
@@ -12,6 +13,9 @@ def parse_args():
 
     _ = sub_parser.add_parser(name=COMMAND_RESTART,
                               help='Restart server. Store "./tmp/restart.txt"')
+
+    _ = sub_parser.add_parser(name=COMMAND_EXECUTE_PIPE,
+                              help='Execute file "beag_pipe"')
 
     put = sub_parser.add_parser(name=COMMAND_PUT,
                                 help='Put files to server')
@@ -35,7 +39,7 @@ def parse_args():
 
     if args.command == COMMAND_RESTART:
         return {'command': COMMAND_RESTART}
-    if args.command == 'put':
+    if args.command == COMMAND_PUT:
         return {
             'command': COMMAND_PUT,
             'files': args.files,
@@ -43,6 +47,8 @@ def parse_args():
             'intersection': args.i,
             'all_files': args.a
         }
+    if args.command == COMMAND_EXECUTE_PIPE:
+        return {'command': COMMAND_EXECUTE_PIPE}
     parser.print_help()
 
 

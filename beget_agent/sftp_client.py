@@ -9,10 +9,6 @@ from progress.bar import PixelBar
 FILE_TO_RESTART = 'tmp/restart.txt'
 
 
-def _get_transport(host, port):
-    return Transport((host, port))
-
-
 def _create_folders(file, _sftp, _remote_home):
     path, _ = os.path.split(file)
     dirs = path.split('/')
@@ -23,23 +19,18 @@ def _create_folders(file, _sftp, _remote_home):
             pass
 
 
-def transportable(func):
+def sftp_command(func):
     def inner(*args, **kwargs):
         config = read_config()
-        host = config.get('host')
-        port = config.get('port')
-        username = config.get('username')
-        password = config.get('password')
-        remote_home = config.get('remote_home')
 
-        transport = _get_transport(host, port)
-        transport.connect(username=username,
-                          password=password)
+        transport = Transport((config.host, config.port))
+        transport.connect(username=config.username,
+                          password=config.password)
+
         sftp = SFTPClient.from_transport(transport)
 
         kwargs['sftp'] = sftp
-        kwargs['remote_home'] = remote_home
-
+        kwargs['remote_home'] = config.remote_home
         output = func(*args, **kwargs)
 
         sftp.close()
@@ -48,7 +39,7 @@ def transportable(func):
     return inner
 
 
-@transportable
+@sftp_command
 def store_files(local_files, **kwargs):
     _remote_home = kwargs.get('remote_home')
     _sftp = kwargs.get('sftp')
@@ -59,7 +50,7 @@ def store_files(local_files, **kwargs):
         _sftp.put(file, remote_file)
 
 
-@transportable
+@sftp_command
 def store_restart(**kwargs):
     _remote_home = kwargs.get('remote_home')
     _sftp = kwargs.get('sftp')
