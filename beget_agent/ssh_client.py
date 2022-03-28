@@ -1,7 +1,9 @@
+import os
+
 import paramiko
 import time
 
-from beget_agent.config import read_config
+from beget_agent.config import read_config, read_beag_pipe
 
 
 def _command(command: str, encoding='utf-8'):
@@ -11,9 +13,7 @@ def _command(command: str, encoding='utf-8'):
 def _sleeping_pipe(shell, *commands_parameters, sleep_time=1.0):
     for func, args in commands_parameters:
         func(args)
-        print(shell.recv_ready())
         time.sleep(sleep_time)
-        print(shell.recv_ready())
 
 
 def ssh_command(func):
@@ -42,7 +42,7 @@ def ssh_command(func):
 
 
 @ssh_command
-def execute_commands(command_list, **kwargs):
+def execute_commands(command_sequence, **kwargs):
     _shell = kwargs.get('shell')
     _remote_home = kwargs.get('remote_home')
     _password = kwargs.get('password')
@@ -52,32 +52,16 @@ def execute_commands(command_list, **kwargs):
         (_shell.send, _command(f'ssh localhost -p 222')),
         (_shell.send, _command(f'{_password}')),
         (_shell.send, _command(f'cd {_remote_home}')),
-        (_shell.exec_command, _command(command_list))
+        (_shell.send, _command(command_sequence))
     )
 
     print(_shell.recv(1024).decode('utf-8'))
 
 
 def main():
-    config = read_config()
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname=config.host,
-                   port=config.port,
-                   username=config.username,
-                   password=config.password,
-                   timeout=5)
-    channel = client.get_transport().open_session()
-    channel.get_pty()
-    channel.exec_command('ssh localhost -p 222')
-    channel.send('{}\r\n'.format(config.password))
-    print(channel.recv(1024))
-
-    channel.close()
-    client.close()
-
-
-
+    command_sequence = read_beag_pipe()
+    print(command_sequence)
+    execute_commands(command_sequence)
 
 
 if __name__ == '__main__':
